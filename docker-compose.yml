@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  producer:
+    build: ./producer
+    ports:
+      - '5001:5001'
+    networks:
+      - grpc-network
+
+  consumer:
+    build: ./consumer
+    depends_on:
+      - producer
+    environment:
+      - GRPC_SERVER_HOST=producer:5001
+    networks:
+      - grpc-network
+
+networks:
+  grpc-network:
+    driver: bridge
